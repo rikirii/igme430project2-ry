@@ -29,6 +29,14 @@ const AccountSchema = new mongoose.Schema({
     unique: true,
     match: /^[A-Za-z0-9_\-.]{1,16}$/,
   },
+  email:{
+    type: String,
+    required: [true, 'Email is requried'],
+    unique: true,
+    lowercase: true,
+    trim: true,
+    match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address'],
+  },
   password: {
     type: String,
     required: true,
