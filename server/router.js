@@ -19,11 +19,21 @@ const router = (app) =>{
     app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
     app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);
 
+    app.get('/settings',mid.requiresLogin, controllers.Account.settingsPage );
+
+    app.post('/changePassword',mid.requiresSecure, mid.requiresLogin, 
+        controllers.Account.changePassword );
+    
+    app.post('/uploadPfp', mid.requiresLogin, controllers.Account.updatePfp );
+
     app.post('/deleteDomo', mid.requiresLogin, controllers.Domo.deleteDomo);
 
 
     app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 
+    app.use((req,res) =>{
+        res.status(404).render('404');
+    });
 };
 
 module.exports = router;

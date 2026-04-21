@@ -19,7 +19,7 @@ nav {
     position: relative;
     top:10px;
     width: fit-content;
-    height: 50px;
+    min-height: 50px;
     margin: 0 auto;
     background: rgba(255,255,255,0.1);
     backdrop-filter: blur(20px);
@@ -29,16 +29,14 @@ nav {
     align-items: center;
     justify-content: space-evenly;
     
-    overflow:hidden;
+    /* overflow:hidden; */
 
     padding: 5px 10px;
 }
 
-nav:nth-child(1) {
-    /* padding-left: 25px; */
-}
 
-.navlink {
+
+.navlink, .dropdown label {
     margin:1rem;
     
     color: rgba(255, 255, 255, 0.9);
@@ -48,7 +46,8 @@ nav:nth-child(1) {
     
 }
 
-.navlink a, .navlink a:link, .navlink a:visited, .navlink a:hover, .navlink a:active {
+.navlink a,
+.dropdown label {
     color: white;
     text-decoration: none;
     padding: 10px 20px;
@@ -57,7 +56,7 @@ nav:nth-child(1) {
 
 }
 
-.navlink a:hover {
+.dropdown label:hover, .navlink a:hover {
     transition: background-color 0.8s ease;
     color: white;
     transform: translateY(-2px);
@@ -69,6 +68,61 @@ nav:nth-child(1) {
     background: linear-gradient(135deg, rgba(255,255,255,0.2),rgba(255,255,255,0.1));
     color: white;
 }
+
+.dropdown{
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown .triggerVis{
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 20px;
+    user-select: none;
+    transition: all 0.3s ease;
+}
+
+.dropdown-Items{
+    position: absolute;
+    top: calc(100% + 8px);
+    left:0;
+    right: auto;
+
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+    min-width: 150px;
+    
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+
+    /* animation */
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: 
+    opacity 0.25s ease,
+    transform 0.25s ease;
+
+
+    font-size: 0.90rem;
+    user-select: none;
+}
+
+
+.dropdown.open .dropdown-Items{
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.dropdown-Items li{
+    padding: 0;
+
+}
+
+
 
 
 
@@ -99,17 +153,24 @@ nav:nth-child(1) {
     font-size:50px;
     color: rgb(238, 249, 255);
     margin: 0 0 1rem;
+    user-select: none;
+
 }
 .mainForm h3 {
     text-align: center;
+    user-select: none;
+
 }
 
 .mainForm label {
     display: inline-block;
     width: 100px;
     margin-right: 10px;
-    text-align: right;
+    text-align: left;
     font-size: 1.1em;
+    width: fit-content;
+    user-select: none;
+    pointer-events: none;
 }
 
 .formSubmit {
@@ -166,6 +227,65 @@ nav:nth-child(1) {
 .hidden {
     display: none;
 }
+
+
+
+/*
+    This is for 404 page styling
+*/
+.error-container{
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow:hidden;
+}
+
+.error-box{
+    text-align: center;
+    padding: 40px 60px;
+    border-radius: 20px;
+    
+    animation: fadeIn 0.2s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn{
+    to{
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.error-box h1{
+    font-size: 100px;
+    margin-bottom: 10px;
+    color:white;
+}
+
+.error-box p {
+    font-size: 22px;
+    margin-bottom: 25px;
+    color: rgba(255,255,255,0.8);
+}
+
+.error-btn{
+    display: inline-block;
+    padding: 10px 25px;
+    border-radius: 25px;
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+}
+
+.error-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rbga(0,0,0,0.2);
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
+}
+
 
 .domoForm {
     display: flex;

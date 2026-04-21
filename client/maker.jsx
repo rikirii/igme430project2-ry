@@ -102,7 +102,7 @@ const DomoList = (props) =>{
     );
 };
 
-const App = () =>{
+const Maker = () =>{
     const [reloadDomos, setReloadDomos] = useState(false);
 
     return (
@@ -117,9 +117,6 @@ const App = () =>{
     );
 };
 
-const init = () =>{
-    const root = createRoot(document.getElementById('app'));
-    root.render(<App/>);
-};
 
-window.onload = init;
+
+export default Maker;

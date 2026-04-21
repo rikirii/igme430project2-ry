@@ -29,9 +29,9 @@ const AccountSchema = new mongoose.Schema({
     unique: true,
     match: /^[A-Za-z0-9_\-.]{1,16}$/,
   },
-  email:{
+  email: {
     type: String,
-    required: [true, 'Email is requried'],
+    required: [false, 'Email is requried'],
     unique: true,
     lowercase: true,
     trim: true,
@@ -56,6 +56,7 @@ AccountSchema.statics.toAPI = (doc) => ({
 // Helper function to hash a password
 AccountSchema.statics.generateHash = (password) => bcrypt.hash(password, saltRounds);
 
+
 /* Helper function for authenticating a password against one already in the
    database. Essentially when a user logs in, we need to verify that the password
    they entered matches the one in the database. Since the database stores hashed
@@ -65,8 +66,10 @@ AccountSchema.statics.generateHash = (password) => bcrypt.hash(password, saltRou
 */
 AccountSchema.statics.authenticate = async (username, password, callback) => {
   try {
-    const doc = await AccountModel.findOne({username}).exec();
-    if(!doc) {
+
+    const doc = await AccountModel.findOne({ username }).exec();
+
+    if (!doc) {
       return callback();
     }
 
@@ -76,6 +79,21 @@ AccountSchema.statics.authenticate = async (username, password, callback) => {
     }
     return callback();
   } catch (err) {
+    return callback(err);
+  }
+};
+
+AccountSchema.statics.passwordAuth = async (user,currentPassword, callback) => {
+  try {
+    const match = await bcrypt.compare(currentPassword, user.password);
+
+    if (!match) {
+      return callback();
+    }
+
+    return callback(null, match);
+  }
+  catch(err){
     return callback(err);
   }
 };

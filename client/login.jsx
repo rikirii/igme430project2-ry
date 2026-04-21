@@ -86,7 +86,7 @@ const SignupWindow = (props) =>{
             <h2>Sign Up</h2>
             <label htmlFor="user">Username: </label>
             <input id="user" type="text" name="username" placeholder="username" />
-            <label htmlFor="email">Email: </label>
+            <label htmlFor="email">Email (Optional): </label>
             <input id="email" type="email" name="email" placeholder="default@example.com" />
             <label htmlFor="pass">Password: </label>
             <input id="pass" type="password" name="pass" placeholder="password" />
