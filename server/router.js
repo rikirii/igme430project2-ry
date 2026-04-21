@@ -7,7 +7,7 @@ const mid = require('./middleware');
 // parameter is always the URL. The last parameter is always the controller. Everything
 // in between is any of the middleware operations you want to call.
 const router = (app) =>{
-    app.get('/getDomos', mid.requiresLogin, controllers.Domo.getDomos);
+    app.get('/getWeapons', mid.requiresLogin, controllers.Weapon.getWeapons);
 
     app.get('/login', mid.requiresSecure, mid.requiresLogout,  controllers.Account.loginPage);
     app.post('/login',  mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
@@ -16,8 +16,8 @@ const router = (app) =>{
 
     app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
-    app.get('/maker', mid.requiresLogin, controllers.Domo.makerPage);
-    app.post('/maker', mid.requiresLogin, controllers.Domo.makeDomo);
+    app.get('/maker', mid.requiresLogin, controllers.Weapon.makerPage);
+    app.post('/maker', mid.requiresLogin, controllers.Weapon.createWeapon);
 
     app.get('/settings',mid.requiresLogin, controllers.Account.settingsPage );
 
@@ -26,7 +26,7 @@ const router = (app) =>{
     
     app.post('/uploadPfp', mid.requiresLogin, controllers.Account.updatePfp );
 
-    app.post('/deleteDomo', mid.requiresLogin, controllers.Domo.deleteDomo);
+    app.post('/deleteWeapon', mid.requiresLogin, controllers.Weapon.deleteWeapon);
 
 
     app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
