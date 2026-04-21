@@ -8,110 +8,117 @@ const {useState, useEffect} = React;
 const {createRoot} = require('react-dom/client');
 
 /*
-    Update domoList once a new domo has been added
+    Update weapList once a new weap has been added
 */
-const handleDomo = (e, onDomoAdded) =>{
+const handleWeapon = (e, onWeapAdded) =>{
     e.preventDefault();
     helper.hideError();
 
-    const name = e.target.querySelector('#domoName').value;
-    const age = e.target.querySelector('#domoAge').value;
-    const level = e.target.querySelector('#domoLevel').value;
+    const name = e.target.querySelector('#weaponName').value;
+    const attackStat = e.target.querySelector('#weaponAttack').value;
+    const rarity = e.target.querySelector('#weaponRarity').value;
 
-    if (!name || !age || !level) {
+    if (!name || !attackStat || !rarity) {
         helper.handleError('All fields are required');
         return false;
     }
 
-    helper.sendPost(e.target.action, {name, age, level}, onDomoAdded);
+    helper.sendPost(e.target.action, {name, attackStat, rarity}, onWeapAdded);
     return false;
 }
 
 
-const DomoForm = (props) =>{
+const WeaponForm = (props) =>{
     return ( 
-        <form id="domoForm"
-            onSubmit={(e) => handleDomo(e, props.triggerReload)} //triggerReload helps know when to reload the domos from the server
-            name="domoForm"
+        <form id="smithingForm"
+            onSubmit={(e) => handleWeapon(e, props.triggerReload)} //triggerReload helps know when to reload the weapons from the server
+            name="smithingForm"
             action="/maker"
             method="POST"
-            className="domoForm"
+            className="smithingForm"
         >
-            <label htmlFor="name">Name: </label>
-            <input id="domoName" type="text" name="name" placeholder="Domo Name" />
-            <label htmlFor="age">Age: </label>
-            <input id="domoAge" type="number" min="0" name="age" />
-            <label htmlFor="level">Level: </label>
-            <input id="domoLevel" type="number" min="0" max="99" name="level" />
-            <input className="makeDomoSubmit" type="submit" value="Make Domo" />
+            <label htmlFor="weaponName">Name: </label>
+            <input id="weaponName" type="text" name="name" placeholder="Weapon Name" />
+            <label htmlFor="weaponAttack">Attack: </label>
+            <input id="weaponAttack" type="number" min="0" name="attack" />
+            <label htmlFor="weaponRarity">Rarity: </label>
+            <select id="weaponRarity" name="rarity" >
+                <option value="Common">Common</option>
+                <option value="Rare">Rare</option>
+                <option value="Peak">Peak</option>
+                <option value="Intent">Intent</option>
+                <option value="Transcendent">Transcendent</option>
+            </select>
+            <input className="smithWeapSubmit" type="submit" value="Smithing Weapon" />
         </form>
 
     );
 };
 
 /*
-    Update domoList once a new domo has been added
+    Update weapList once a new weapon has been added
 */
-const handleDelete = (domo, onDomoDeleted) =>{
+const handleDelete = (weapon, onWeaponDeleted) =>{
     helper.hideError();
 
-    if (!confirm("Are you sure you want to delete this domo?")) return;
+    if (!confirm("Are you sure you want to destroy this weapon?")) return;
 
-    helper.sendPost('/deleteDomo', domo, onDomoDeleted);
+    helper.sendPost('/deleteWeapon', weapon, onWeaponDeleted);
     return false;
 }
 
 
-const DomoList = (props) =>{
-    const [domos,setDomos] = useState(props.domos);
+const WeaponList = (props) =>{
+    const [weapons,setWeapons] = useState(props.weapons);
 
     useEffect(()=>{
-        const loadDomosFormServer = async ()=>{
-            const response = await fetch('/getDomos');
+        const loadWeaponsFormServer = async ()=>{
+            const response = await fetch('/getWeapons');
             const data = await response.json();
-            setDomos(data.domos);
+            setWeapons(data.weapons);
         };
-        loadDomosFormServer();
-    },[props.reloadDomos]);
+        loadWeaponsFormServer();
+    },[props.reloadWeapons]);
 
-    if (domos.length === 0){
+
+    if (weapons.length === 0){
         return (
-            <div className="domoList">
-                <h3 className="emptyDomo">No Domos Yet!</h3>
+            <div className="weaponList">
+                <h3 className="emptyWeapon">No Weapons Yet!</h3>
             </div>
         );
     }
     
 
-    const domoNodes = domos.map(domo=>{
+    const weaponNodes = weapons.map(weapon=>{
         return (
-            <div key={domo.id} className="domo">
+            <div key={weapon.id} className="weapon">
                 <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace"/>
-                <h3 className="domoName">Name: {domo.name}</h3>
-                <h3 className="domoAge">Age: {domo.age}</h3>
-                <h3 className="domoLevel">Level: {domo.level}</h3>
-                <button type="button" onClick={()=> handleDelete(domo, props.triggerReload)}>Delete</button>
+                <h3 className="weaponName">Name: {weapon.name}</h3>
+                <h3 className="weaponAttack">Attack: {weapon.properties.stats.attack}</h3>
+                <h3 className="weaponRarity">Rarity: {weapon.properties.rarity}</h3>
+                <button type="button" onClick={()=> handleDelete(weapon, props.triggerReload)}>Delete</button>
             </div>
         );
     });
 
     return (
-        <div className="domoList">
-            {domoNodes}
+        <div className="weaponList">
+            {weaponNodes}
         </div>
     );
 };
 
 const Maker = () =>{
-    const [reloadDomos, setReloadDomos] = useState(false);
+    const [reloadWeapons, setReloadWeapons] = useState(false);
 
     return (
         <div>
-            <div id="makeDomo">
-                <DomoForm triggerReload={()=>setReloadDomos(!reloadDomos)}/>
+            <div id="makeWeapon">
+                <WeaponForm triggerReload={()=>setReloadWeapons(!reloadWeapons)}/>
             </div>
-            <div id="domos">
-                <DomoList domos={[]} reloadDomos={reloadDomos} triggerReload={()=>setReloadDomos(!reloadDomos)}/>
+            <div id="weapons">
+                <WeaponList weapons={[]} reloadWeapons={reloadWeapons} triggerReload={()=>setReloadWeapons(!reloadWeapons)}/>
             </div>
         </div>
     );
