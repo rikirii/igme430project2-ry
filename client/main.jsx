@@ -1,24 +1,55 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import Maker from './maker.jsx';
+import helper from './helper.js';
 import Settings from './settings.jsx';
+import Game from './game.jsx';
+import Leaderboard from './leaderboard.jsx'
+import PremiumScreen from './webstore.jsx';
 
 const App = () => {
     const path = window.location.pathname;
 
+    const [premiumStatus, setPremiumStatus] = useState(()=>helper.getPremiumCache ?? null);
 
-    let Component = null;
+    useEffect( ()=>{
+
+        if (premiumStatus === null) return null;
+        let mounted = true;
+
+        helper.getPremiumStatus().then(status=>{
+            if (mounted){
+                setPremiumStatus(status);
+            }
+        });
+
+        return ()=>{mounted = false;};
+        
+    }, []);
+
+
+    const updatePremium = (status) =>{
+        setPremiumStatus(status);
+        setCachedPremiumStatus(status);
+    }
+
+    let ActiveComponent = null;
 
     if (path.startsWith('/settings')) {
-        Component = Settings;
+        ActiveComponent = Settings;
     }
-    else if (path.startsWith('/maker')) {
-        Component = Maker;
+    else if (path.startsWith('/leaderboard')) {
+        ActiveComponent = Leaderboard;
     }
-    else{
-        return;
+    else if (path.startsWith('/game')){
+        ActiveComponent = Game;
     }
+    else if (path.startsWith('/webstore')){
+        ActiveComponent = PremiumScreen; //for now, it's this
+    }
+    
+
+    if (!ActiveComponent) return null;
     
 
     useEffect(() => {
@@ -50,7 +81,25 @@ const App = () => {
         };
 
     }, []);
-    return <Component />
+    
+
+    return (
+        <div className={`main-layout ${premiumStatus ? 'premium-active' : 'free-tier'}`}>
+
+            <aside className={`ad-banner ${premiumStatus?'hidden' : 'visible'} ` }>
+                <p>Ad Space</p>
+            </aside>
+            
+            <section id='content-area'>
+                <ActiveComponent isPremium={premiumStatus} updatePremium={setPremiumStatus} />
+            </section>
+
+            <aside className={`ad-banner ${premiumStatus?'hidden' : 'visible'} ` }>
+                <p>Ad Space</p>
+            </aside>
+
+        </div>
+    )
 }
 
 const init = () => {

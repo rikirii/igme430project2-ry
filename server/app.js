@@ -11,10 +11,11 @@ const redis = require('redis');
 require('dotenv').config();
 
 const router = require('./router.js');
+const gameSocketSetup = require('./gameSocket.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-const dbURI = process.env.MONGODB_URI || 'mongodb://localhost/DomoMaker';
+const dbURI = process.env.MONGODB_URI || 'mongodb://localhost/project2';
 mongoose.connect(dbURI).catch((err) => {
     if (err) {
         console.log('Could not connect to database');
@@ -39,7 +40,7 @@ redisClient.connect().then(() => {
     app.use(express.urlencoded({ extended: true }));
     app.use(express.json());
 
-    app.use(session({
+    const sessionMiddle = session({
         key: 'sessionid',
         store: new RedisStore({
             client: redisClient,
@@ -47,15 +48,18 @@ redisClient.connect().then(() => {
         secret: 'AriThankyou ItsAwesome',
         resave: false,
         saveUninitialized: false,
-    }));
+    });
+
+    app.use(sessionMiddle);
 
     app.engine('handlebars', expressHandlebars.engine({ defaultLayout: '' }));
     app.set('view engine', 'handlebars');
     app.set('views', `${__dirname}/../views`);
 
     router(app);
+    const server = gameSocketSetup.gameSocketSetup(app, sessionMiddle);
 
-    app.listen(port, (err) => {
+    server.listen(port, (err) => {
         if (err) { throw err; }
         console.log(`Listening on port ${port}`);
     });

@@ -9,6 +9,7 @@ const settingsPage = (req, res) => {
     return res.render('app');
 };
 
+
 //handle password change
 const changePassword = async (req, res) => {
     // password change logic
@@ -84,7 +85,7 @@ const login = (req, res) => {
 
         req.session.account = Account.toAPI(account);
 
-        return res.json({ redirect: '/maker' });
+        return res.json({ redirect: '/game' });
     });
 };
 
@@ -107,7 +108,7 @@ const signup = async (req, res) => {
         const newAccount = new Account({ username, email, password: hash });
         await newAccount.save();
         req.session.account = Account.toAPI(newAccount);
-        return res.json({ redirect: './maker' });
+        return res.json({ redirect: './game' });
     } catch (err) {
         console.log(err);
         if (err.code === 11000) {
@@ -117,6 +118,34 @@ const signup = async (req, res) => {
     }
 };
 
+
+const togglePremium = async(req, res) =>{
+    try{
+        const account = await Account.findById(req.session.account._id);
+
+        account.premiumStatus = !account.premiumStatus;
+        await account.save();
+
+        req.session.account.premiumStatus = account.premiumStatus;
+        return res.json({premiumStatus: account.premiumStatus});
+    }catch(err){
+        console.log(err);
+        return res.status(400).json({error: 'Failed to update premium status'});
+    }
+};
+
+const getUserStatus = (req, res) =>{
+    if (!req.session.account){
+        return res.status(200).json({premiumStatus: false});
+    }
+
+    return res.json({
+        premiumStatus: req.session.account.premiumStatus,
+        username: req.session.account.username
+    });
+};
+
+
 module.exports = {
     loginPage,
     login,
@@ -125,4 +154,6 @@ module.exports = {
     settingsPage,
     changePassword,
     updatePfp,
+    togglePremium,
+    getUserStatus,
 };

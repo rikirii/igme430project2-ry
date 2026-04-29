@@ -233,6 +233,83 @@ nav {
 }
 
 
+/* ad space / premium stuff */
+.main-layout{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 20px;
+}
+
+.ad-banner{
+    width: 160px;
+    height: 600px;
+    background-color: #2c3E50;
+    border: 2px solid #34495e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #7f8c8d;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#content-area{
+    flex: 1;
+    max-width: 800px;
+}
+
+.premium-active .ad-banner{
+    visibility: hidden;
+    opacity: 0;
+}
+
+.ad-banner{
+    transition: none;
+}
+
+.ad-banner.hidden{
+    opacity: 0;
+    pointer-events: none;
+}
+
+.ad-banner.visible{
+    opacity: 1;
+}
+
+.premium-active #app{
+    border: 1px solid #f1c40f;
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.3);
+}
+
+
+.premium-banner{
+    text-align: center;
+    padding: 50px;
+}
+
+.premium-banner h1{
+    font-size: 3rem;
+    color: #f1c40f;
+}
+
+.payment-box{
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    max-width: 300px;
+}
+
+.payment-box button{
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
 
 /*
     This is for 404 page styling
@@ -290,184 +367,52 @@ nav {
     background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
 }
 
-
-.smithingForm {
-    display: flex;
-    /* gap:10px; */
-    align-items: center;
-
-    border: 2px solid #338acc;
-    height: 35px;
-    /* width: 700px; */
-    width: fit-content;
-    margin-top:20px;
-    padding-top:10px;
-    padding-bottom:10px;
-    background-color: #55acee;
-    border-bottom-right-radius: 4px;
-    border-top-right-radius: 4px;
-}
-
-.smithingForm label {
-    display: inline-block;
-    width: 75px;
-    margin-left: 10px;
-    font-size: 1.2em;
+/* error message notification */
+#alertMessage {
+    position:fixed;
+    top: 20px;
     
+    
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
+    max-width: 400px;
+    transition: all 0.3s ease;
+
+}
+
+.alert-content{
+    background-color: #ff4757;
     color: white;
-}
-
-.smithingForm input[type=text] {
-    float:left;
-}
-
-.smithWeapSubmit {
-    transition: background-color 0.4s ease;
-    display: inline;
-    width: 90px;
-    background-color: #55acee;
-    border-radius: 2px;
-    color: white;
-    text-decoration: none;
-
-    margin-left:20px;
-    margin-right: 10px;
-}
-
-.smithWeapSubmit:link, .smithWeapSubmit:visited, .smithWeapSubmit:hover, .smithWeapSubmit:active {
-    color: white;
-}
-
-.smithWeapSubmit:hover {
-    transition: background-color 0.4s ease;
-    background-color: #338acc;
-}
-
-#domoMessage {
-    top: 250px;
-    width: 250px;
-    height: 650px;
-    position: absolute;
-    z-index: 200;
-    right: 0px;
-    overflow: hidden;
-}
-
-#domoMessage h3 {
-    width: 200px;
-    position: absolute;
-    top: 0px;
-    left: 20px;
-}
-
-#speech {
-    height: 120px;
-    width: 250px;
-    z-index:300;
-}
-
-#errorMessage {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: red;
-    font-style: italic;
-}
-
-#weapon {
-    z-index: 225;
-    margin-top: -20px;
-    margin-left: 135px;
-    height: 450px;
-    width: 300px;
-    -ms-transform: rotate(330deg);
-    -webkit-transform: rotate(330deg); 
-    transform: rotate(330deg);
-}
-
-#weapons {
-    width: 40%;
-    min-width: 400px;
-    border: 2px solid #55acee;
-    border-radius: 4px;
-    margin: 0 auto;
-    margin-top: 100px;
-}
-
-.weapon {
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    width: 95%;
-    margin: 0 auto;
-    margin-top: 2px;
-    margin-bottom: 2px;
-    border: 2px solid #55acee;
-    border-radius: 4px;
-    background-color: #55acee;
-    padding: 10px;
-    min-height:60px;
-    overflow: hidden;
+    font-family: sans-serif;
+    font-weight: 600;
 }
 
-.weapon:hover {
-    transition: border-color 0.2s ease-out;
-    border-color: rgba(255,255,255, 0.8);
-    transition: background-color 2.6s ease-out;
-    background-color: #66bfff;
+.close-btn{
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 10px;
+    opacity: 0.7;
 }
 
-img.domoFace {
-    margin-left: 25px;
-    margin-right: 10px;
-    height: 50px;
-    width: 50px;
-    border-radius: 4px;
-    margin-top:10px;
-    float:left;
+.close-btn:hover{
+    opacity: 1;
 }
 
-h3.emptyWeapon {
-    width: 400px;
-    font-size: 1.5em;
-    margin: 0 auto;
-    text-align: center;
-    margin-top: 18px;
-}
-
-h3.weaponName {
-    /* float:left; */
-    width: 200px;
-    font-weight: bold;
-    padding-left: 65px;
-    font-size: 1.5em;
-}
-
-h3.weaponAttack {
-    /* float:right; */
-    text-align: left;
-    width: 100px;
-    font-weight: bold;
-    padding-right: 40px;
-    font-size: 1.5em;
-}
-
-h3.weaponRarity {
-    /* float:right; */
-    text-align: left;
-    width: 100px;
-    font-weight: bold;
-    padding-right: 40px;
-    font-size: 1.5em;
+.hidden{
+    display: none;
+    opacity: 0;
+    top: -100px !important;
 }
 
 
-
-
-.weapon:first-child {
-    margin-top: 10px;
-}
-
-.weapon:last-child {
-    margin-bottom:10px;
-}

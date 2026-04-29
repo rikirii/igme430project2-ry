@@ -3,8 +3,20 @@
    end in an error.
 */
 const handleError = (message) => {
-  document.getElementById('errorMessage').textContent = message;
-  document.getElementById('domoMessage').classList.remove('hidden');
+  const errMsg = document.getElementById('errorMessage')
+  const alertMsg = document.getElementById('alertMessage')
+
+  errMsg.textContent = message;
+  alertMsg.classList.remove('hidden');
+
+  //hide message after a delay of 20 seconds.
+  setTimeout(() => {
+    alertMsg.classList.add('hidden');
+  }, 20000);
+
+  document.querySelector('#closeAlert').onclick = () => {
+    document.querySelector('#alertMessage').classList.add('hidden');
+  };
 };
 
 /* Sends post requests to the server using fetch. Will look for various
@@ -20,17 +32,17 @@ const sendPost = async (url, data, handler) => {
   });
 
   const result = await response.json();
-  document.getElementById('domoMessage').classList.add('hidden');
+  document.getElementById('alertMessage').classList.add('hidden');
 
-  if(result.redirect) {
+  if (result.redirect) {
     window.location = result.redirect;
   }
 
-  if(result.error) {
+  if (result.error) {
     handleError(result.error);
   }
 
-  if (handler){
+  if (handler) {
     handler(result);
   }
 };
@@ -38,12 +50,53 @@ const sendPost = async (url, data, handler) => {
 /*
     Hides the error popup
 */
-const hideError = () =>{
-    document.getElementById('domoMessage').classList.add('hidden');
+const hideError = () => {
+  document.getElementById('alertMessage').classList.add('hidden');
+};
+
+
+// premium 
+let premiumCache = null;
+let premiumFetch = null;
+
+const getPremiumCache = () =>{
+  return premiumCache;
+};
+
+const setCachedPremiumStatus = (status) =>
+{
+  premiumCache = status;
+}
+
+const getPremiumStatus = async () => {
+  if (premiumCache !== null) {
+    return premiumCache;
+  }
+
+  // if request is already in flight, reuse it
+  if (premiumFetch) {
+    return premiumFetch
+  }
+
+  premiumFetch = fetch('/getUserStatus').then(res => res.json())
+    .then(data => {
+      premiumCache = data.premiumStatus;
+      premiumFetch = null;
+      return premiumCache;
+    })
+    .catch(err => {
+      premiumFetch = null;
+      throw err;
+    });
+
+  return premiumFetch;
 };
 
 module.exports = {
-    handleError,
-    sendPost,
-    hideError,
+  handleError,
+  sendPost,
+  hideError,
+  getPremiumStatus,
+  getPremiumCache,
+  setCachedPremiumStatus,
 }

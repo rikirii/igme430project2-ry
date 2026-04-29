@@ -41,6 +41,25 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  gameStats:{
+    wins:{
+      type: Number,
+      default: 0,
+    },
+    losses:{
+      type: Number,
+      default: 0,
+    },
+    rating:{
+      type: Number, //ELO
+      index: true,
+      default: 1000,
+    },
+  },
+  premiumStatus:{
+    type: Boolean,
+    default: false,
+  },
   createdDate: {
     type: Date,
     default: Date.now,
@@ -51,6 +70,7 @@ const AccountSchema = new mongoose.Schema({
 AccountSchema.statics.toAPI = (doc) => ({
   username: doc.username,
   _id: doc._id,
+  premiumStatus: doc.premiumStatus,
 });
 
 // Helper function to hash a password
