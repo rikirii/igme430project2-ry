@@ -52,10 +52,8 @@ const Game = () => {
 
     useEffect(() => {
         return () => {
+            // clean up socket connection and listeners on unmount
             if (socketRef.current){
-                // socket.off('init');
-                // socket.off('match-found');
-                // socket.off('match-result');
                 socketRef.current.disconnect();
                 socketRef.current = null;
             }
