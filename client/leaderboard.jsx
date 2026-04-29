@@ -5,6 +5,7 @@ const {useState, useEffect} = React;
 const Leaderboard = () =>{
     const [players, setPlayers] = useState([]);
 
+    // fetch leaderboard data
     useEffect( ()=>{
         const fetchLeaderboard = async ()=>{
             const res = await fetch('/getLeaderboard');
