@@ -108,7 +108,7 @@ const signup = async (req, res) => {
         const newAccount = new Account({ username, email, password: hash });
         await newAccount.save();
         req.session.account = Account.toAPI(newAccount);
-        return res.json({ redirect: './game' , premiumStatus: account.premiumStatus});
+        return res.json({ redirect: './game' , premiumStatus: req.session.account.premiumStatus});
     } catch (err) {
         console.log(err);
         if (err.code === 11000) {
