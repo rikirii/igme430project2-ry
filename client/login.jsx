@@ -21,7 +21,11 @@ const handleLogin = (e) =>{
         return false;
     }
 
-    helper.sendPost(e.target.action, {username, pass});
+    helper.sendPost(e.target.action, {username, pass}, (result)=>{
+        if (!result.error){
+            setPremiumStatus(result.premiumStatus);
+        }
+    });
     return false;
 }
 

@@ -8,7 +8,7 @@ const gamePage = async (req, res) =>{
 };
 
 const leaderboardPage = async (req, res) =>{
-    return res.render('app');
+    return res.render('app', { premiumStatus: req.session.account.premiumStatus });
 };
 
 const getLeaderboard = async (req, res) =>{

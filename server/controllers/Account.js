@@ -6,7 +6,7 @@ const loginPage = (req, res) => {
 };
 
 const settingsPage = (req, res) => {
-    return res.render('app');
+    return res.render('app', { premiumStatus: req.session.account.premiumStatus });
 };
 
 
@@ -85,7 +85,7 @@ const login = (req, res) => {
 
         req.session.account = Account.toAPI(account);
 
-        return res.json({ redirect: '/game' });
+        return res.json({ redirect: '/game' , premiumStatus: account.premiumStatus});
     });
 };
 
@@ -108,7 +108,7 @@ const signup = async (req, res) => {
         const newAccount = new Account({ username, email, password: hash });
         await newAccount.save();
         req.session.account = Account.toAPI(newAccount);
-        return res.json({ redirect: './game' });
+        return res.json({ redirect: './game' , premiumStatus: account.premiumStatus});
     } catch (err) {
         console.log(err);
         if (err.code === 11000) {

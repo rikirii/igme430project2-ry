@@ -3,12 +3,11 @@ const helper = require('./helper.js');
 
 
 
-const PremiumScreen = ({isPremium, updatePremium}) =>{
-    const togglePremium = async() =>{
-        await helper.sendPost('/togglePremium', {}, (result) =>{
-            if (updatePremium){
-                updatePremium(result.premiumStatus);
-            }
+const PremiumScreen = ({premiumStatus}) =>{
+    // toggle premium status
+    const togglePremium = () =>{
+        helper.sendPost('/togglePremium', {}, (result) =>{
+            helper.setPremiumStatus(result.premiumStatus);
         });
     };
 
@@ -18,8 +17,8 @@ const PremiumScreen = ({isPremium, updatePremium}) =>{
             <p>Tried of ads? Go Pro Today!</p>
 
             <div className="payment-box">
-                <h3>{isPremium ? "Status: Premium Active" : "Status: Free Tier"}</h3>
-                <button onClick={togglePremium} className='premium-btn' style={{backgroundColor: isPremium ?'#e74c3c' : '#2ecc71' }}>{isPremium ? "Cancel Subscription" : "Pay $9.99"}</button>
+                <h3>{premiumStatus ? "Status: Premium Active" : "Status: Free Tier"}</h3>
+                <button onClick={togglePremium} className='premium-btn' style={{backgroundColor: premiumStatus ?'#e74c3c' : '#2ecc71' }}>{premiumStatus ? "Cancel Subscription" : "Pay $9.99"}</button>
             </div>
         </div>
     );

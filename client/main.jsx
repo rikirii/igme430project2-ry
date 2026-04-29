@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import helper from './helper.js';
+import helper, { subscribePremium } from './helper.js';
 import Settings from './settings.jsx';
 import Game from './game.jsx';
 import Leaderboard from './leaderboard.jsx'
@@ -10,27 +10,24 @@ import PremiumScreen from './webstore.jsx';
 const App = () => {
     const path = window.location.pathname;
 
-    const [premiumStatus, setPremiumStatus] = useState(()=>helper.getPremiumCache ?? null);
+    // premium status state, initialized from server-rendered data attribute on app div
+    const [premiumStatus, setPremiumStatus] = useState(() => {
+        const appDiv = document.getElementById('app');
+        return appDiv && appDiv.dataset.premium === 'true';
+    });
 
+    // subscribe to changes in premium status, and update local state when it changes. This will trigger a re-render to show/hide premium features as needed
     useEffect( ()=>{
-
-        if (premiumStatus === null) return null;
-        let mounted = true;
-
-        helper.getPremiumStatus().then(status=>{
-            if (mounted){
-                setPremiumStatus(status);
-            }
-        });
-
-        return ()=>{mounted = false;};
+        const unsubscribe = subscribePremium(setPremiumStatus);
+        return unsubscribe;
         
     }, []);
 
 
+    // helper function to update premium status
     const updatePremium = (status) =>{
         setPremiumStatus(status);
-        setCachedPremiumStatus(status);
+        helper.setPremiumStatus(status);
     }
 
     let ActiveComponent = null;
@@ -91,7 +88,7 @@ const App = () => {
             </aside>
             
             <section id='content-area'>
-                <ActiveComponent isPremium={premiumStatus} updatePremium={setPremiumStatus} />
+                <ActiveComponent premiumStatus={premiumStatus} />
             </section>
 
             <aside className={`ad-banner ${premiumStatus?'hidden' : 'visible'} ` }>

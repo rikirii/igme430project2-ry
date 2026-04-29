@@ -41,7 +41,6 @@ const sendPost = async (url, data, handler) => {
   if (result.error) {
     handleError(result.error);
   }
-
   if (handler) {
     handler(result);
   }
@@ -56,40 +55,28 @@ const hideError = () => {
 
 
 // premium 
-let premiumCache = null;
-let premiumFetch = null;
+let premiumStatus = null;
+let listeners= [];
 
-const getPremiumCache = () =>{
-  return premiumCache;
+// get status of premium, used for conditional rendering of premium features
+const getPremiumStatus = () => {
+  return premiumStatus;
 };
 
-const setCachedPremiumStatus = (status) =>
-{
-  premiumCache = status;
-}
+// set premium status, and notify listeners of the change
+const setPremiumStatus = (value)=>{
+  console.log("store value: " , value);
+  premiumStatus = value;
+  listeners.forEach(fn => fn(premiumStatus) );
+};
 
-const getPremiumStatus = async () => {
-  if (premiumCache !== null) {
-    return premiumCache;
-  }
+// subscribe to changes in premium status. Returns an unsubscribe function to stop listening for changes
+const subscribePremium = (fn) =>{
+  listeners.push(fn);
 
-  // if request is already in flight, reuse it
-  if (premiumFetch) {
-    return premiumFetch
-  }
-
-  premiumFetch = fetch('/getUserStatus').then(res => res.json())
-    .then(data => {
-      premiumCache = data.premiumStatus;
-      premiumFetch = null;
-      return premiumCache;
-    })
-    .catch(err => {
-      premiumFetch = null;
-      throw err;
-    });
-
-  return premiumFetch;
+  return ()=>{
+    listeners = listeners.filter(listener => listener !== fn);
+  };
 };
 
 module.exports = {
@@ -97,6 +84,7 @@ module.exports = {
   sendPost,
   hideError,
   getPremiumStatus,
-  getPremiumCache,
-  setCachedPremiumStatus,
+  setPremiumStatus,
+  subscribePremium,
+
 }
