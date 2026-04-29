@@ -11,6 +11,7 @@ const Game = () => {
     const [roomId, setRoomId] = useState(null);
     const [result, setResult] = useState(null);
     const [status, setStatus] = useState('');
+    const [opponentName, setOpponentName] = useState('');
 
     const [myUserId, setMyUserId] = useState(null);
 
@@ -32,8 +33,9 @@ const Game = () => {
                 setMyUserId(userId);
             })
 
-            socketRef.current.on('match-found', ({ roomId }) => {
+            socketRef.current.on('match-found', ({ roomId, opponentUsername }) => {
                 setRoomId(roomId);
+                setOpponentName(opponentUsername);
                 setScreen('game');
                 setStatus('Choose your move');
             });
@@ -73,7 +75,7 @@ const Game = () => {
 
     if (screen === 'menu') {
         return (
-            <div>
+            <div className='lobby'>
                 <h1>Rock Paper Scissors</h1>
                 <button onClick={matchMaking}>Play Ranked</button>
             </div>
@@ -81,12 +83,13 @@ const Game = () => {
     }
 
     if (screen === 'queue') {
-        return <h2>{status}</h2>;
+        return <h2 className='queue'>{status}</h2>;
     }
 
     if (screen === 'game') {
         return (
-            <div>
+            <div className='gameScreen'>
+                <h2>You vs {opponentName}</h2>
                 <h2>{status}</h2>
 
                 <button onClick={() => sendMove('rock')}>Rock</button>
@@ -121,7 +124,7 @@ const Game = () => {
         return (
             <div className="result-container">
                 <h2>Result: {statusMessage}</h2>
-                <dive>
+                <div className='statBreakdown'>
                     {playerIds.map(id => (
                         <div key={id} className="player-move">
                             <p>
@@ -131,7 +134,7 @@ const Game = () => {
 
                         </div>
                     ))}
-                </dive>
+                </div>
 
                 <button onClick={matchMaking}>Play Again</button>
             </div>

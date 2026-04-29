@@ -119,7 +119,7 @@ const handleMove = (socket, {roomId, move}) =>{
 
 
 /// match making
-const handleFindMatch = (socket) =>{    
+const handleFindMatch = async (socket) =>{    
 
     // prevent duplicate entries
     // checks if user already in queue
@@ -154,8 +154,24 @@ const handleFindMatch = (socket) =>{
             }
         };
 
-        // notify both players that the match has started
-        io.to(roomId).emit('match-found', {roomId});
+        // get usernames for both players
+        const socketUser = await Account.findById(socket.userId);
+        const opponentUser = await Account.findById(opponent.userId);
+        
+        const socketUsername = socketUser ? socketUser.username : 'You';
+        const opponentUsername = opponentUser ? opponentUser.username : 'Opponent';
+
+        // notify socket (player A) of opponent
+        socket.emit('match-found', {
+            roomId,
+            opponentUsername
+        });
+
+        // notify opponent (player B) of socket as their opponent
+        opponent.emit('match-found', {
+            roomId,
+            opponentUsername: socketUsername
+        });
     }
     else{
         // if queue is empty, add user to it

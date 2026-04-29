@@ -423,3 +423,125 @@ nav {
 }
 
 
+/* leadboard styling */
+.leaderboard-container{
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: rgb(53, 65, 82);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    text-align: center ;
+    background-color: rgb(102, 109, 119);
+    color: black;
+}
+
+.leaderboard-container table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaderboard-container th, .leaderboard-container td{
+    text-align: left;
+    color: rgb(243, 222, 176);
+    padding: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-size: 1.1em;
+}
+
+.lobby{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    gap: 20px;
+}
+
+.lobby h1{
+    font-size: 3rem;
+    color: rgb(238, 249, 255);
+}
+
+.lobby button{
+    padding: 15px 30px;
+    font-size: 1.5em;
+    border-radius: 999px;
+    border: none;
+    background-color: #3d7fb1;
+    color: white;
+    transition: background-color 0.4s ease;
+}
+
+.queue{
+    font-size: 1.5rem;
+    color: rgb(238, 249, 255);
+    text-align: center;
+    margin-top: 20vh;
+    user-select: none;
+}
+
+.gameScreen{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    gap: 20px;
+}
+
+.gameScreen h2{
+    font-size: 2rem;
+    color: rgb(238, 249, 255);
+}
+
+.gameScreen button{
+    padding: 15px 30px;
+    font-size: 1.5em;
+    border-radius: 999px;
+    border: none;
+    background-color: #3d7fb1;
+    color: white;
+    transition: background-color 0.4s ease;
+}
+
+.result-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 50px;
+}
+
+.result-container h2{
+    font-size: 1.5rem;
+    color: rgb(238, 249, 255);
+}
+
+.result-container .statBreakdown{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.player-move{
+    background-color: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    color: rgb(218, 218, 218);
+}
+
+.result-container .player-move p{
+    font-size: 1.2em;
+    margin: 0;
+}
+
+.result-container button{
+    padding: 15px 30px;
+    font-size: 1.5em;
+    border-radius: 999px;
+    border: none;
+    background-color: #3d7fb1;
+    color: white;
+    transition: background-color 0.4s ease;
+}
